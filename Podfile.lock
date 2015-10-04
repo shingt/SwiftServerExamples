@@ -1,0 +1,19 @@
+PODS:
+  - Swifter (1.0.1)
+
+DEPENDENCIES:
+  - Swifter (from `https://github.com/shingt/swifter.git`)
+
+EXTERNAL SOURCES:
+  Swifter:
+    :git: https://github.com/shingt/swifter.git
+
+CHECKOUT OPTIONS:
+  Swifter:
+    :commit: 6c595897943eb22eb34d0597011eb55c7d9fb900
+    :git: https://github.com/shingt/swifter.git
+
+SPEC CHECKSUMS:
+  Swifter: 56a926cd277ecf7b1dae7b7b7e41750f857956cb
+
+COCOAPODS: 0.38.2
