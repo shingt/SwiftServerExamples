@@ -13,10 +13,6 @@ let server = HttpServer()
         let path = templatePath("top")
         let template = try! Template(path: path)
 
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateStyle = .MediumStyle
-        template.registerInBaseContext("format", Box(dateFormatter))
-
         let data = [
         "name": "shibuya.swift",
         "date": NSDate(),
