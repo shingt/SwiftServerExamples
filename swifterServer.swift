@@ -2,7 +2,7 @@ import Swifter
 import Mustache
 
 func templatePath(path: String) -> String {
-    return "./views/" + path + ".mustache"
+    return "./views/\(path).mustache"
 }
 
 let server = HttpServer()
