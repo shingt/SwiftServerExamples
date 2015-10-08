@@ -8,7 +8,6 @@ func templatePath(path: String) -> String {
 let server = HttpServer()
 
 server["/"] = { request in
-
     let documentName: String = "document"
     let path = templatePath("top")
     do {
@@ -17,7 +16,7 @@ server["/"] = { request in
         "name": "shibuya.swift",
         "date": NSDate(),
         ]
-        let rendering: String = try! template.render(Box(data))
+        let rendering: String = try template.render(Box(data))
         return .OK(.HTML(rendering))
     } catch {
         return .InternalServerError

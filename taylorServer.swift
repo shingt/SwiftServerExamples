@@ -19,7 +19,7 @@ server.get("/") {
             "date": NSDate(),
             ]
 
-            let rendering: String = try! template.render(Box(data))
+            let rendering: String = try template.render(Box(data))
 
             res.bodyString = rendering
             cb(.Send(req, res))
