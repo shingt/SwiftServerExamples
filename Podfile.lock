@@ -1,19 +1,19 @@
 PODS:
-  - Swifter (1.0.1)
+  - Swifter (1.0.2)
 
 DEPENDENCIES:
-  - Swifter (from `https://github.com/shingt/swifter.git`)
+  - Swifter (from `https://github.com/glock45/swifter.git`)
 
 EXTERNAL SOURCES:
   Swifter:
-    :git: https://github.com/shingt/swifter.git
+    :git: https://github.com/glock45/swifter.git
 
 CHECKOUT OPTIONS:
   Swifter:
-    :commit: 6c595897943eb22eb34d0597011eb55c7d9fb900
-    :git: https://github.com/shingt/swifter.git
+    :commit: 4765f416017469ec4449edfa080bd3383b999d9b
+    :git: https://github.com/glock45/swifter.git
 
 SPEC CHECKSUMS:
-  Swifter: 56a926cd277ecf7b1dae7b7b7e41750f857956cb
+  Swifter: 711617abaf291bf64e84284bb0ac50b939aca763
 
 COCOAPODS: 0.38.2
