@@ -7,13 +7,15 @@ func templatePath(path: String) -> String {
 
 let server = HttpServer()
 
+server["/static/(.+)"] = HttpHandlers.directory("./static/")
+
 server["/"] = { request in
     let documentName: String = "document"
     let path = templatePath("top")
     do {
         let template = try Template(path: path)
         let data = [
-        "name": "shibuya.swift",
+        "nick_name": "shibuya.swift",
         "date": NSDate(),
         ]
         let rendering: String = try template.render(Box(data))
