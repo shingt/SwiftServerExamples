@@ -15,8 +15,16 @@ server["/"] = { request in
     do {
         let template = try Template(path: path)
         let data = [
-        "nick_name": "shibuya.swift",
-        "date": NSDate(),
+            "user": [
+                "account_name": "shibuya.swift",
+                "email": "hoge@email.com",
+                "last_name": "Tanaka",
+                "first_name": "Taro",
+                "sex": "male",
+                "birthday": "20001000",
+                "pref": "東京",
+                "friends_size": "40",
+            ]
         ]
         let rendering: String = try template.render(Box(data))
         return .OK(.HTML(rendering))
@@ -33,5 +41,18 @@ if !server.start(port, error: &error) {
 } else {
     print("Server started on port: \(port)")
     NSRunLoop.mainRunLoop().run()
+}
+
+func getUser(user_id: Int) {
+    return [
+        "account_name": "shibuya.swift",
+        "email": "hoge@email.com",
+        "last_name": "Tanaka",
+        "first_name": "Taro",
+        "sex": "male",
+        "birthday": "20001000",
+        "pref": "東京",
+        "friends_size": "40",
+    ]
 }
 
