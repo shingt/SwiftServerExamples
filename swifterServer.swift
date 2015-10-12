@@ -9,6 +9,7 @@ func getUser(userId: Int) -> [String: AnyObject] {
     return [
         "id":           userId,
         "account_name": "shibuya.swift",
+        "nick_name":    "shibuswi",
         "email":        "hoge@email.com",
     ]
 }
@@ -20,7 +21,7 @@ func getProfile(userId: Int) -> [String: String] {
         "sex":          "male",
         "birthday":     "20001000",
         "pref":         "東京",
-        "friends_size": "40"
+        "friends_size": "40",
     ]
 }
 
@@ -29,24 +30,37 @@ func currentUser() -> [String: AnyObject] {
     return getUser(currentUserId)
 }
 
-func getEntries() -> [[String: String]] {
+func userFromAccount(accountName: String) -> [String: AnyObject] {
+    return [
+        "id":           1,
+        "account_name": "someone",
+        "nick_name":    "soone",
+        "email":        "someone@email.com",
+    ]
+}
+
+func getEntries() -> [[String: AnyObject]] {
     return [
         [ 
             "id": "1", 
-            "title": "はじめました"
+            "title": "はじめました",
+            "is_private": true,
         ],
         [ 
             "id": "2", 
-            "title": "つづき"
+            "title": "つづき",
+            "is_private": false,
         ],
         [ 
             "id": "3", 
-            "title": "ひみつ"
+            "title": "ひみつ",
+            "is_private": true,
         ],
         [ 
             "id": "4", 
-            "title": "ビールのんだ"
-        ]
+            "title": "ビールのんだ",
+            "is_private": false,
+        ],
     ]
 }
 
@@ -55,18 +69,27 @@ func getFootprints() -> [[String: String]] {
         [
             "updated":      "20151010",
             "account_name": "hoge",
-            "nick_name":    "ほげ"
+            "nick_name":    "ほげ",
         ],
         [
             "updated":      "20151009",
             "account_name": "hige",
-            "nick_name":    "ひげ"
+            "nick_name":    "ひげ",
         ],
         [
             "updated":      "20151008",
             "account_name": "huge",
-            "nick_name":    "ふげ"
+            "nick_name":    "ふげ",
         ]
+    ]
+}
+
+func prefectures() -> [String] {
+    return [
+        "未入力",
+        "北海道", "青森県", "岩手県", "宮城県", "秋田県", "山形県", "福島県", "茨城県", "栃木県", "群馬県", "埼玉県", "千葉県", "東京都", "神奈川県", "新潟県", "富山県",
+        "石川県", "福井県", "山梨県", "長野県", "岐阜県", "静岡県", "愛知県", "三重県", "滋賀県", "京都府", "大阪府", "兵庫県", "奈良県", "和歌山県", "鳥取県", "島根県",
+        "岡山県", "広島県", "山口県", "徳島県", "香川県", "愛媛県", "高知県", "福岡県", "佐賀県", "長崎県", "熊本県", "大分県", "宮崎県", "鹿児島県", "沖縄県"
     ]
 }
 
@@ -82,23 +105,23 @@ server["/profile/(.+)"] = { request in
     do {
         let template = try Template(path: path)
 
-        let account_name = "shibuya.swift"
-        let owner = currentUser()
-        let profile = getProfile(owner["id"] as! Int)
+        let account_name = "someone"
+        let owner = userFromAccount(account_name)
+        let owner_id = owner["id"] as! Int
+        let profile = getProfile(owner_id)
         let entries = getEntries()
-        let footprints = getFootprints()
-        let comments_for_me = ["fixme": "fixme"]
-        let entries_of_friends = ["fixme": "fixme"]
-        let comments_of_friends = ["fixme": "fixme"]
+        let current_user = currentUser()
+        let is_same_user = owner_id == current_user["id"] as! Int
 
         let data = [
             "owner": owner,
             "profile": profile,
             "entries": entries,
             "private": true,
-//            "is_friend" => is_friend($owner->{id}),
-//            "current_user" => current_user(),
-//            "prefectures" => prefectures(),
+            "is_friend": false,
+            "current_user": currentUser(),
+            "prefectures": prefectures(),
+            "is_same_user": is_same_user,
         ]
         let rendering: String = try template.render(Box(data))
 
@@ -142,7 +165,7 @@ server["/"] = { request in
             "footprints": footprints,
             "comments_for_me": comments_for_me,
             "entries_of_friends": entries_of_friends,
-            "comments_of_friends": comments_of_friends
+            "comments_of_friends": comments_of_friends,
         ]
         let rendering: String = try template.render(Box(data))
 
