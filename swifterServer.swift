@@ -5,14 +5,16 @@ func templatePath(path: String) -> String {
     return "./views/\(path).mustache"
 }
 
-//func getFriends() -> [String] {
-//
-//}
-
-func getUser(user_id: Int) -> [String: String] {
+func getUser(userId: Int) -> [String: AnyObject] {
     return [
+        "id":           userId,
         "account_name": "shibuya.swift",
         "email":        "hoge@email.com",
+    ]
+}
+
+func getProfile(userId: Int) -> [String: String] {
+    return [
         "last_name":    "Tanaka",
         "first_name":   "Taro",
         "sex":          "male",
@@ -22,8 +24,9 @@ func getUser(user_id: Int) -> [String: String] {
     ]
 }
 
-func currentUser() -> [String: String] {
-    return getUser(0)
+func currentUser() -> [String: AnyObject] {
+    let currentUserId = 0
+    return getUser(currentUserId)
 }
 
 func getEntries() -> [[String: String]] {
@@ -84,17 +87,22 @@ server["/"] = { request in
         let template = try Template(path: path)
         template.registerInBaseContext("uppercase", Box(uppercase))
 
+        let user = currentUser()
+        let profile = getProfile(user["id"] as! Int)
         let entries = getEntries()
         let footprints = getFootprints()
+        let comments_for_me = ["fixme": "fixme"]
+        let entries_of_friends = ["fixme": "fixme"]
+        let comments_of_friends = ["fixme": "fixme"]
 
         let data = [
-            "user": currentUser(),
+            "user": user,
+            "profile": profile,
             "entries": entries,
-            "footprints": footprints
-//        'profile' => $profile,
-//        'comments_for_me' => $comments_for_me,
-//        'entries_of_friends' => $entries_of_friends,
-//        'comments_of_friends' => $comments_of_friends,
+            "footprints": footprints,
+            "comments_for_me": comments_for_me,
+            "entries_of_friends": entries_of_friends,
+            "comments_of_friends": comments_of_friends
 //        'friends' => $friends,
         ]
         let rendering: String = try template.render(Box(data))
