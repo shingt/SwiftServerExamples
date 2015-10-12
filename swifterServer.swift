@@ -46,23 +46,36 @@ func getEntries() -> [[String: AnyObject]] {
         [ 
             "id": "1", 
             "title": "はじめました",
+            "content": "これがうわさのアレか!",
             "is_private": true,
         ],
         [ 
             "id": "2", 
             "title": "つづき",
+            "content": "いやっほおおおおおおおお\nおおおおおおおおおおおおおおおおおおおおおおおおおおおおおう",
             "is_private": false,
         ],
         [ 
             "id": "3", 
             "title": "ひみつ",
+            "content": "まじもう仕事がこんなことになっていようとはと思ってたら予選なしにするんだった! まじで!",
             "is_private": true,
         ],
         [ 
             "id": "4", 
             "title": "ビールのんだ",
+            "content": "うまああああああああああああああああああああああああああああああああああああああああああああああああああああい!",
             "is_private": false,
         ],
+    ]
+}
+
+func getEntry(entry_id: Int) -> [String: AnyObject] {
+    return [
+        "id": "4", 
+        "title": "ビールのんだ",
+        "content": "うまああああああああああああああああああああああああああああああああああああああああああああああああああああい!",
+        "is_private": false,
     ]
 }
 
@@ -147,9 +160,9 @@ server["/diary/entries/(.+)"] = { request in
         let myself = owner_id == current_user["id"] as! Int
 
         let data = [
-            owner: owner,
+            owner:   owner,
             entries: entries,
-            myself: myself,
+            myself:  myself,
         ]
         let rendering: String = try template.render(Box(data))
 
@@ -159,9 +172,29 @@ server["/diary/entries/(.+)"] = { request in
     }
 }
 
-//server["/diary/entry/"] = { request in
-//
-//}
+server["/diary/entry/(.+)"] = { request in
+    let path = templatePath("entry")
+
+    do {
+        let template = try Template(path: path)
+
+//        let entry_id = 
+        let account_name = "someone"
+        let owner = userFromAccount(account_name)
+        let entry = getEntry(3)
+
+        let data = [
+            owner: owner,
+            entry: entry,
+//            comments: comments,
+        ]
+        let rendering: String = try template.render(Box(data))
+
+        return .OK(.HTML(rendering))
+    } catch {
+        return .InternalServerError
+    }
+}
 
 server["/"] = { request in
     let path = templatePath("top")
