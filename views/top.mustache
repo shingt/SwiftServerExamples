@@ -7,39 +7,37 @@
   <div class="col-md-12"><a href="/profile/<%= @user[:account_name] %>">プロフィール</a></div>
   <div class="col-md-4">
     <dl>
-      {{# user}}
-        <dt>アカウント名</dt><dd id="prof-account-name">
-          {{uppercase(account_name)}}
-        </dd>
-        <dt>メールアドレス</dt><dd id="prof-email">
-          {{email}}
-        </dd>
-        <dt>姓</dt><dd id="prof-last-name">
-          {{last_name}}
-        </dd>
-        <dt>名</dt><dd id="prof-first-name">
-          {{first_name}}
-        </dd>
-        <dt>性別</dt><dd id="prof-sex">
-          {{sex}}
-        </dd>
-        <dt>誕生日</dt><dd id="prof-birthday">
-          {{birthday}}
-        </dd>
-        <dt>住んでいる県</dt><dd id="prof-pref">
-          {{pref}}
-        </dd>
-        <dt>友だちの人数</dt><dd id="prof-friends">
-        <a href="/friends">
-          {{friends_size}}人
-        </a>
-        </dd>
-      {{/ user}}
+      <dt>アカウント名</dt><dd id="prof-account-name">
+        {{ uppercase(user.account_name) }}
+      </dd>
+      <dt>メールアドレス</dt><dd id="prof-email">
+        {{ user.email }}
+      </dd>
+      <dt>姓</dt><dd id="prof-last-name">
+        {{ user.last_name }}
+      </dd>
+      <dt>名</dt><dd id="prof-first-name">
+        {{ user.first_name }}
+      </dd>
+      <dt>性別</dt><dd id="prof-sex">
+        {{ user.sex }}
+      </dd>
+      <dt>誕生日</dt><dd id="prof-birthday">
+        {{ user.birthday }}
+      </dd>
+      <dt>住んでいる県</dt><dd id="prof-pref">
+        {{ user.pref }}
+      </dd>
+      <dt>友だちの人数</dt><dd id="prof-friends">
+      <a href="/friends">
+        {{ user.friends_size }}人
+      </a>
+      </dd>
     </dl>
   </div>
 
   <div class="col-md-4">
-    <div id="entries-title"><a href="/diary/entries/<: ($user['account_name']) :>">あなたの日記エントリ</a></div>
+      <div id="entries-title"><a href="/diary/entries/{{user.account_name}}">あなたの日記エントリ</a></div>
     <div id="entries">
       <ul class="list-group">
         {{# entries }}
