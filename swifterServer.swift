@@ -70,22 +70,62 @@ func getFootprints() -> [[String: String]] {
     ]
 }
 
-let uppercase = Filter { (rendering: Rendering) in
-    let reversedString = String(rendering.string.characters.reverse())
-        return Rendering(reversedString, rendering.contentType)
-}
-
+// pragma mark - Main - 
 
 let server = HttpServer()
 
 server["/static/(.+)"] = HttpHandlers.directory("./static/")
+
+server["/profile/(.+)"] = { request in
+    let path = templatePath("profile")
+
+    do {
+        let template = try Template(path: path)
+
+        let account_name = "shibuya.swift"
+        let owner = currentUser()
+        let profile = getProfile(owner["id"] as! Int)
+        let entries = getEntries()
+        let footprints = getFootprints()
+        let comments_for_me = ["fixme": "fixme"]
+        let entries_of_friends = ["fixme": "fixme"]
+        let comments_of_friends = ["fixme": "fixme"]
+
+        let data = [
+            "owner": owner,
+            "profile": profile,
+            "entries": entries,
+            "private": true,
+//            "is_friend" => is_friend($owner->{id}),
+//            "current_user" => current_user(),
+//            "prefectures" => prefectures(),
+        ]
+        let rendering: String = try template.render(Box(data))
+
+        return .OK(.HTML(rendering))
+    } catch {
+        return .InternalServerError
+    }
+
+}
+
+//server["/diary/entry/"] = { request in
+//
+//}
+//
+//server["/diary/entries"] = { request in
+//
+//}
+//
+//server["/footprints"] = { request in
+//
+//}
 
 server["/"] = { request in
     let documentName: String = "document"
     let path = templatePath("top")
     do {
         let template = try Template(path: path)
-        template.registerInBaseContext("uppercase", Box(uppercase))
 
         let user = currentUser()
         let profile = getProfile(user["id"] as! Int)
@@ -103,7 +143,6 @@ server["/"] = { request in
             "comments_for_me": comments_for_me,
             "entries_of_friends": entries_of_friends,
             "comments_of_friends": comments_of_friends
-//        'friends' => $friends,
         ]
         let rendering: String = try template.render(Box(data))
 
