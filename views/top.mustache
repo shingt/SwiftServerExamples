@@ -3,8 +3,8 @@
 
 <h2>ISUxi index</h2>
 <div class="row panel panel-primary" id="prof">
-  <div class="col-md-12 panel-title" id="prof-nickname">{{nick_name}}</div>
-  <div class="col-md-12"><a href="/profile/<%= @user[:account_name] %>">プロフィール</a></div>
+  <div class="col-md-12 panel-title" id="prof-nickname">{{ profile.nick_name }}</div>
+  <div class="col-md-12"><a href="/profile/{{ user.account_name }}">プロフィール</a></div>
   <div class="col-md-4">
     <dl>
       <dt>アカウント名</dt><dd id="prof-account-name">
@@ -14,23 +14,23 @@
         {{ user.email }}
       </dd>
       <dt>姓</dt><dd id="prof-last-name">
-        {{ user.last_name }}
+        {{ profile.last_name }}
       </dd>
       <dt>名</dt><dd id="prof-first-name">
-        {{ user.first_name }}
+        {{ profile.first_name }}
       </dd>
       <dt>性別</dt><dd id="prof-sex">
-        {{ user.sex }}
+        {{ profile.sex }}
       </dd>
       <dt>誕生日</dt><dd id="prof-birthday">
-        {{ user.birthday }}
+        {{ profile.birthday }}
       </dd>
       <dt>住んでいる県</dt><dd id="prof-pref">
-        {{ user.pref }}
+        {{ profile.pref }}
       </dd>
       <dt>友だちの人数</dt><dd id="prof-friends">
       <a href="/friends">
-        {{ user.friends_size }}人
+        {{ profile.friends_size }}人
       </a>
       </dd>
     </dl>
