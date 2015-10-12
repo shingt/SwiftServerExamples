@@ -22,6 +22,10 @@ func getUser(user_id: Int) -> [String: String] {
     ]
 }
 
+func currentUser() -> [String: String] {
+    return getUser(0)
+}
+
 func getEntries() -> [[String: String]] {
     return [
         [ 
@@ -43,6 +47,26 @@ func getEntries() -> [[String: String]] {
     ]
 }
 
+func getFootprints() -> [[String: String]] {
+    return [
+        [
+            "updated":      "20151010",
+            "account_name": "hoge",
+            "nick_name":    "ほげ"
+        ],
+        [
+            "updated":      "20151009",
+            "account_name": "hige",
+            "nick_name":    "ひげ"
+        ],
+        [
+            "updated":      "20151008",
+            "account_name": "huge",
+            "nick_name":    "ふげ"
+        ]
+    ]
+}
+
 let uppercase = Filter { (rendering: Rendering) in
     let reversedString = String(rendering.string.characters.reverse())
         return Rendering(reversedString, rendering.contentType)
@@ -60,9 +84,18 @@ server["/"] = { request in
         let template = try Template(path: path)
         template.registerInBaseContext("uppercase", Box(uppercase))
 
+        let entries = getEntries()
+        let footprints = getFootprints()
+
         let data = [
-            "user":    getUser(0),
-            "entries": getEntries()
+            "user": currentUser(),
+            "entries": entries,
+            "footprints": footprints
+//        'profile' => $profile,
+//        'comments_for_me' => $comments_for_me,
+//        'entries_of_friends' => $entries_of_friends,
+//        'comments_of_friends' => $comments_of_friends,
+//        'friends' => $friends,
         ]
         let rendering: String = try template.render(Box(data))
 

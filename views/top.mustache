@@ -37,7 +37,7 @@
   </div>
 
   <div class="col-md-4">
-      <div id="entries-title"><a href="/diary/entries/{{user.account_name}}">あなたの日記エントリ</a></div>
+      <div id="entries-title"><a href="/diary/entries/{{ user.account_name }}">あなたの日記エントリ</a></div>
     <div id="entries">
       <ul class="list-group">
         {{# entries }}
@@ -53,9 +53,11 @@
     <div><a href="/footprints">あなたのページへの足あと</a></div>
     <div id="footprints">
       <ul class="list-group">
-        : for $footprints -> $fp {
-        <li class="list-group-item footprints-footprint"><: ($fp['updated']) :>: <a href="/profile/<: ($fp['account_name']) :>"><: ($fp['nick_name']) :>さん</a>
-        : }
+        {{# footprints }}
+          <li class="list-group-item footprints-footprint">
+          {{ updated }} <a href="/profile/{{ account_name }}">{{ nick_name }}さん</a>
+          </li>
+        {{/ footprints }}
       </ul>
     </div>
   </div>
