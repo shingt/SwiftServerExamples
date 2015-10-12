@@ -5,6 +5,8 @@ func templatePath(path: String) -> String {
     return "./views/\(path).mustache"
 }
 
+// As I couldn't figure out the easy way to connect to db functions themselves containe data..
+
 func getUser(userId: Int) -> [String: AnyObject] {
     return [
         "id":           userId,
@@ -111,7 +113,7 @@ server["/profile/(.+)"] = { request in
         let profile = getProfile(owner_id)
         let entries = getEntries()
         let current_user = currentUser()
-        let is_same_user = owner_id == current_user["id"] as! Int
+        let myself = owner_id == current_user["id"] as! Int
 
         let data = [
             "owner": owner,
@@ -121,7 +123,7 @@ server["/profile/(.+)"] = { request in
             "is_friend": false,
             "current_user": currentUser(),
             "prefectures": prefectures(),
-            "is_same_user": is_same_user,
+            "myself": myself,
         ]
         let rendering: String = try template.render(Box(data))
 
@@ -129,24 +131,41 @@ server["/profile/(.+)"] = { request in
     } catch {
         return .InternalServerError
     }
+}
 
+server["/diary/entries/(.+)"] = { request in
+    let path = templatePath("entries")
+
+    do {
+        let template = try Template(path: path)
+
+        let account_name = "someone"
+        let owner = userFromAccount(account_name)
+        let owner_id = owner["id"] as! Int
+        let entries = getEntries()
+        let current_user = currentUser()
+        let myself = owner_id == current_user["id"] as! Int
+
+        let data = [
+            owner: owner,
+            entries: entries,
+            myself: myself,
+        ]
+        let rendering: String = try template.render(Box(data))
+
+        return .OK(.HTML(rendering))
+    } catch {
+        return .InternalServerError
+    }
 }
 
 //server["/diary/entry/"] = { request in
 //
 //}
-//
-//server["/diary/entries"] = { request in
-//
-//}
-//
-//server["/footprints"] = { request in
-//
-//}
 
 server["/"] = { request in
-    let documentName: String = "document"
     let path = templatePath("top")
+
     do {
         let template = try Template(path: path)
 

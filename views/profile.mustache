@@ -33,7 +33,7 @@
   {{/ entries }}
 </div>
 
-{{# is_same_user }}
+{{# myself }}
 <h2>プロフィール更新</h2>
 <div id="profile-post-form">
   <form method="POST" action="/profile/{{ current_user.account_name }}">
@@ -60,15 +60,15 @@
     <div><input type="submit" value="更新" /></div>
   </form>
 </div>
-{{/ is_same_user }}
-{{^ is_same_user }}
+{{/ myself }}
+{{^ myself }}
 <h2>あなたは友だちではありません</h2>
 <div id="profile-friend-form">
   <form method="POST" action="/friends/{{ owner.account_name }}">
     <input type="submit" value="このユーザと友だちになる" />
   </form>
 </div>
-{{/ is_same_user }}
+{{/ myself }}
 
 {{/ content }}
 {{/ layout }}
