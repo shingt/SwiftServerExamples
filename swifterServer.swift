@@ -5,6 +5,50 @@ func templatePath(path: String) -> String {
     return "./views/\(path).mustache"
 }
 
+//func getFriends() -> [String] {
+//
+//}
+
+func getUser(user_id: Int) -> [String: String] {
+    return [
+        "account_name": "shibuya.swift",
+        "email":        "hoge@email.com",
+        "last_name":    "Tanaka",
+        "first_name":   "Taro",
+        "sex":          "male",
+        "birthday":     "20001000",
+        "pref":         "東京",
+        "friends_size": "40"
+    ]
+}
+
+func getEntries() -> [[String: String]] {
+    return [
+        [ 
+            "id": "1", 
+            "title": "はじめました"
+        ],
+        [ 
+            "id": "2", 
+            "title": "つづき"
+        ],
+        [ 
+            "id": "3", 
+            "title": "ひみつ"
+        ],
+        [ 
+            "id": "4", 
+            "title": "ビールのんだ"
+        ]
+    ]
+}
+
+let uppercase = Filter { (rendering: Rendering) in
+    let reversedString = String(rendering.string.characters.reverse())
+        return Rendering(reversedString, rendering.contentType)
+}
+
+
 let server = HttpServer()
 
 server["/static/(.+)"] = HttpHandlers.directory("./static/")
@@ -14,19 +58,14 @@ server["/"] = { request in
     let path = templatePath("top")
     do {
         let template = try Template(path: path)
+        template.registerInBaseContext("uppercase", Box(uppercase))
+
         let data = [
-            "user": [
-                "account_name": "shibuya.swift",
-                "email": "hoge@email.com",
-                "last_name": "Tanaka",
-                "first_name": "Taro",
-                "sex": "male",
-                "birthday": "20001000",
-                "pref": "東京",
-                "friends_size": "40",
-            ]
+            "user":    getUser(0),
+            "entries": getEntries()
         ]
         let rendering: String = try template.render(Box(data))
+
         return .OK(.HTML(rendering))
     } catch {
         return .InternalServerError
@@ -41,18 +80,5 @@ if !server.start(port, error: &error) {
 } else {
     print("Server started on port: \(port)")
     NSRunLoop.mainRunLoop().run()
-}
-
-func getUser(user_id: Int) {
-    return [
-        "account_name": "shibuya.swift",
-        "email": "hoge@email.com",
-        "last_name": "Tanaka",
-        "first_name": "Taro",
-        "sex": "male",
-        "birthday": "20001000",
-        "pref": "東京",
-        "friends_size": "40",
-    ]
 }
 
