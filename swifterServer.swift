@@ -35,7 +35,7 @@ func currentUser() -> [String: AnyObject] {
 func userFromAccount(accountName: String) -> [String: AnyObject] {
     return [
         "id":           1,
-        "account_name": "someone",
+        "account_name": accountName,
         "nick_name":    "soone",
         "email":        "someone@email.com",
     ]
@@ -44,25 +44,25 @@ func userFromAccount(accountName: String) -> [String: AnyObject] {
 func getEntries() -> [[String: AnyObject]] {
     return [
         [ 
-            "id": "1", 
+            "id": "0", 
             "title": "はじめました",
             "content": "これがうわさのアレか!",
             "is_private": true,
         ],
         [ 
-            "id": "2", 
+            "id": "1", 
             "title": "つづき",
             "content": "いやっほおおおおおおおお\nおおおおおおおおおおおおおおおおおおおおおおおおおおおおおう",
             "is_private": false,
         ],
         [ 
-            "id": "3", 
+            "id": "2", 
             "title": "ひみつ",
             "content": "まじもう仕事がこんなことになっていようとはと思ってたら予選なしにするんだった! まじで!",
             "is_private": true,
         ],
         [ 
-            "id": "4", 
+            "id": "3", 
             "title": "ビールのんだ",
             "content": "うまああああああああああああああああああああああああああああああああああああああああああああああああああああい!",
             "is_private": false,
@@ -72,7 +72,7 @@ func getEntries() -> [[String: AnyObject]] {
 
 func getEntry(entry_id: Int) -> [String: AnyObject] {
     return [
-        "id": "4", 
+        "id": "3", 
         "title": "ビールのんだ",
         "content": "うまああああああああああああああああああああああああああああああああああああああああああああああああああああい!",
         "is_private": false,
@@ -160,9 +160,9 @@ server["/diary/entries/(.+)"] = { request in
         let myself = owner_id == current_user["id"] as! Int
 
         let data = [
-            owner:   owner,
-            entries: entries,
-            myself:  myself,
+            "owner":   owner,
+            "entries": entries,
+            "myself":  myself,
         ]
         let rendering: String = try template.render(Box(data))
 
@@ -178,14 +178,14 @@ server["/diary/entry/(.+)"] = { request in
     do {
         let template = try Template(path: path)
 
-//        let entry_id = 
+        let entry_id: Int? = (request.capturedUrlGroups.last as String)!.toInt()
         let account_name = "someone"
         let owner = userFromAccount(account_name)
-        let entry = getEntry(3)
+        let entry = getEntry(entry_id)
 
         let data = [
-            owner: owner,
-            entry: entry,
+            "owner": owner,
+            "entry": entry,
 //            comments: comments,
         ]
         let rendering: String = try template.render(Box(data))

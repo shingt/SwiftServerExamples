@@ -5,7 +5,7 @@
 <div class="row panel panel-primary" id="entry-entry">
   <div class="entry-title">タイトル: <a href="/diary/entry/{{ entry.id }}">{{ entry.title }}</a></div>
   <div class="entry-content">
-    {{ content }}
+    {{ entry.content }}
   </div>
   {{# is_private }}
   <div class="text-danger entry-private">範囲: 友だち限定公開</div>
