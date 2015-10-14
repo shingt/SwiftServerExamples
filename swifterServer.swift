@@ -178,10 +178,10 @@ server["/diary/entry/(.+)"] = { request in
     do {
         let template = try Template(path: path)
 
-        let entry_id: Int? = (request.capturedUrlGroups.last as String)!.toInt()
+        let entry_id: Int? = Int(request.capturedUrlGroups.last as String!)
         let account_name = "someone"
         let owner = userFromAccount(account_name)
-        let entry = getEntry(entry_id)
+        let entry = getEntry(entry_id!)
 
         let data = [
             "owner": owner,
