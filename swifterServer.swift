@@ -110,6 +110,11 @@ func prefectures() -> [String] {
 
 // pragma mark - Main - 
 
+enum SwiftServerError : ErrorType {
+    case InvalidPath
+    case OtherError
+}
+
 let server = HttpServer()
 
 server["/static/(.+)"] = HttpHandlers.directory("./static/")
@@ -178,10 +183,13 @@ server["/diary/entry/(.+)"] = { request in
     do {
         let template = try Template(path: path)
 
-        let entry_id: Int? = Int(request.capturedUrlGroups.last as String!)
+        guard let entry_id: Int = Int(request.capturedUrlGroups.last as String!) else {
+            throw SwiftServerError.InvalidPath
+        }
+
         let account_name = "someone"
         let owner = userFromAccount(account_name)
-        let entry = getEntry(entry_id!)
+        let entry = getEntry(entry_id)
 
         let data = [
             "owner": owner,
