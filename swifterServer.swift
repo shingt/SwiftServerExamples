@@ -5,7 +5,7 @@ func templatePath(path: String) -> String {
     return "./views/\(path).mustache"
 }
 
-// As I couldn't figure out the easy way to connect to db functions themselves containe data..
+// As I couldn't figure out the easy way to connect to db functions themselves contain data..
 
 func getUser(userId: Int) -> [String: AnyObject] {
     return [
