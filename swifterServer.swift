@@ -32,7 +32,7 @@ func currentUser() -> [String: AnyObject] {
     return getUser(currentUserId)
 }
 
-func userFromAccount(accountName: String) -> [String: AnyObject] {
+func userFromAccount(accountName: String) -> [String: AnyObject]? {
     return [
         "id":           1,
         "account_name": accountName,
@@ -112,6 +112,7 @@ func prefectures() -> [String] {
 
 enum SwiftServerError : ErrorType {
     case InvalidPath
+    case InvalidUser
     case OtherError
 }
 
@@ -119,14 +120,18 @@ let server = HttpServer()
 
 server["/static/(.+)"] = HttpHandlers.directory("./static/")
 
+// /profile/:account_name
 server["/profile/(.+)"] = { request in
     let path = templatePath("profile")
 
     do {
         let template = try Template(path: path)
 
-        let account_name = "someone"
-        let owner = userFromAccount(account_name)
+        let account_name: String = request.capturedUrlGroups.last as String!
+        guard let owner = userFromAccount(account_name) else {
+            throw SwiftServerError.InvalidUser
+        }
+
         let owner_id = owner["id"] as! Int
         let profile = getProfile(owner_id)
         let entries = getEntries()
@@ -151,14 +156,18 @@ server["/profile/(.+)"] = { request in
     }
 }
 
+// /diary/entrries/:account_name
 server["/diary/entries/(.+)"] = { request in
     let path = templatePath("entries")
 
     do {
         let template = try Template(path: path)
+        
+        let account_name: String = request.capturedUrlGroups.last as String!
+        guard let owner = userFromAccount(account_name) else {
+            throw SwiftServerError.InvalidUser
+        }
 
-        let account_name = "someone"
-        let owner = userFromAccount(account_name)
         let owner_id = owner["id"] as! Int
         let entries = getEntries()
         let current_user = currentUser()
@@ -177,6 +186,7 @@ server["/diary/entries/(.+)"] = { request in
     }
 }
 
+// /diary/entry/:entry_id
 server["/diary/entry/(.+)"] = { request in
     let path = templatePath("entry")
 
@@ -187,8 +197,11 @@ server["/diary/entry/(.+)"] = { request in
             throw SwiftServerError.InvalidPath
         }
 
-        let account_name = "someone"
-        let owner = userFromAccount(account_name)
+        let account_name = "someone"  // FIX: getUser
+        guard let owner = userFromAccount(account_name) else {
+            throw SwiftServerError.InvalidUser
+        }
+
         let entry = getEntry(entry_id)
 
         let data = [
