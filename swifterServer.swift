@@ -5,7 +5,7 @@ func templatePath(path: String) -> String {
     return "./views/\(path).mustache"
 }
 
-// As I couldn't figure out the easy way to connect to db functions themselves contain data..
+// As I couldn't figure out an easy way to connect to db functions themselves contain data..
 
 func getUser(userId: Int) -> [String: AnyObject] {
     return [
@@ -99,6 +99,23 @@ func getFootprints() -> [[String: String]] {
     ]
 }
 
+func getComments() -> [[String: String]] {
+    return [
+        [
+            "comment": "おつ",
+            "created_at":      "20151008",
+        ],
+        [
+            "comment": "おつ",
+            "created_at":      "20151008",
+        ],
+        [
+            "comment": "おつ",
+            "created_at":      "20151008",
+        ],
+    ]
+}
+
 func prefectures() -> [String] {
     return [
         "未入力",
@@ -110,14 +127,13 @@ func prefectures() -> [String] {
 
 // pragma mark - Main - 
 
-enum SwiftServerError : ErrorType {
+enum SwiftServerError: ErrorType {
     case InvalidPath
     case InvalidUser
     case OtherError
 }
 
 let server = HttpServer()
-
 server["/static/(.+)"] = HttpHandlers.directory("./static/")
 
 // /profile/:account_name
@@ -172,11 +188,13 @@ server["/diary/entries/(.+)"] = { request in
         let entries = getEntries()
         let current_user = currentUser()
         let myself = owner_id == current_user["id"] as! Int
+        let comments = getComments()
 
         let data = [
             "owner":   owner,
             "entries": entries,
             "myself":  myself,
+            "comment_count": comments.count,
         ]
         let rendering: String = try template.render(Box(data))
 
@@ -203,11 +221,12 @@ server["/diary/entry/(.+)"] = { request in
         }
 
         let entry = getEntry(entry_id)
+        let comments = getComments()
 
         let data = [
             "owner": owner,
             "entry": entry,
-//            comments: comments,
+            "comments": comments,
         ]
         let rendering: String = try template.render(Box(data))
 
