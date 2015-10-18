@@ -129,7 +129,7 @@ func prefectures() -> [String] {
 
 enum SwiftServerError: ErrorType {
     case InvalidPath
-    case InvalidUser
+    case ResourceNotFound
     case OtherError
 }
 
@@ -145,7 +145,7 @@ server["/profile/(.+)"] = { request in
 
         let account_name: String = request.capturedUrlGroups.last as String!
         guard let owner = userFromAccount(account_name) else {
-            throw SwiftServerError.InvalidUser
+            throw SwiftServerError.ResourceNotFound
         }
 
         let owner_id = owner["id"] as! Int
@@ -167,6 +167,8 @@ server["/profile/(.+)"] = { request in
         let rendering: String = try template.render(Box(data))
 
         return .OK(.HTML(rendering))
+    } catch SwiftServerError.ResourceNotFound {
+        return .BadRequest
     } catch {
         return .InternalServerError
     }
@@ -181,7 +183,7 @@ server["/diary/entries/(.+)"] = { request in
         
         let account_name: String = request.capturedUrlGroups.last as String!
         guard let owner = userFromAccount(account_name) else {
-            throw SwiftServerError.InvalidUser
+            throw SwiftServerError.ResourceNotFound
         }
 
         let owner_id = owner["id"] as! Int
@@ -199,6 +201,8 @@ server["/diary/entries/(.+)"] = { request in
         let rendering: String = try template.render(Box(data))
 
         return .OK(.HTML(rendering))
+    } catch SwiftServerError.ResourceNotFound {
+        return .BadRequest
     } catch {
         return .InternalServerError
     }
@@ -217,7 +221,7 @@ server["/diary/entry/(.+)"] = { request in
 
         let account_name = "someone"  // FIX: getUser
         guard let owner = userFromAccount(account_name) else {
-            throw SwiftServerError.InvalidUser
+            throw SwiftServerError.ResourceNotFound
         }
 
         let entry = getEntry(entry_id)
@@ -231,6 +235,10 @@ server["/diary/entry/(.+)"] = { request in
         let rendering: String = try template.render(Box(data))
 
         return .OK(.HTML(rendering))
+    } catch SwiftServerError.InvalidPath {
+        return .BadRequest
+    } catch SwiftServerError.ResourceNotFound {
+        return .BadRequest
     } catch {
         return .InternalServerError
     }
