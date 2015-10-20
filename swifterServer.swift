@@ -7,24 +7,120 @@ func templatePath(path: String) -> String {
 
 // As I couldn't figure out an easy way to connect to db functions themselves contain data..
 
-func getUser(userId: Int) -> [String: AnyObject] {
-    return [
-        "id":           userId,
+let users: [[String: AnyObject]] = [
+    [
+        "id":           0,
         "account_name": "shibuya.swift",
         "nick_name":    "shibuswi",
         "email":        "hoge@email.com",
+    ],
+    [
+        "id":           1,
+        "account_name": "ichiro",
+        "nick_name":    "icchian",
+        "email":        "ichiro@email.com",
+    ],
+    [
+        "id":           2,
+        "account_name": "takeda",
+        "nick_name":    "take",
+        "email":        "take@email.com",
     ]
+]
+
+let profiles: [[String: String]] = [
+    [
+        "last_name":    "Swift",
+        "first_name":   "Shibuya",
+        "sex":          "male",
+        "birthday":     "20001001",
+        "pref":         "東京",
+        "friends_size": "40",
+    ],
+    [
+        "last_name":    "Tanaka",
+        "first_name":   "Ichiro",
+        "sex":          "male",
+        "birthday":     "20001002",
+        "pref":         "山形",
+        "friends_size": "30",
+    ],
+    [
+        "last_name":    "Takeda",
+        "first_name":   "Jiro",
+        "sex":          "male",
+        "birthday":     "20001002",
+        "pref":         "大阪",
+        "friends_size": "20",
+    ],
+]
+
+let entries: [[String: AnyObject]] = [
+    [ 
+        "id": "0", 
+        "title": "はじめました",
+        "content": "これがうわさのアレか!",
+        "is_private": true,
+    ],
+    [ 
+        "id": "1", 
+        "title": "つづき",
+        "content": "いやっほおおおおおおおお\nおおおおおおおおおおおおおおおおおおおおおおおおおおおおおう",
+        "is_private": false,
+    ],
+    [ 
+        "id": "2", 
+        "title": "ひみつ",
+        "content": "まじもう仕事がこんなことになっていようとはと思ってたら予選なしにするんだった! まじで!",
+        "is_private": true,
+    ],
+    [ 
+        "id": "3", 
+        "title": "ビールのんだ",
+        "content": "うまああああああああああああああああああああああああああああああああああああああああああああああああああああい!",
+        "is_private": false,
+    ],
+]
+
+let footprints: [[String: String]] = [
+    [
+        "updated":      "20151010",
+        "account_name": "hoge",
+        "nick_name":    "ほげ",
+    ],
+    [
+        "updated":      "20151009",
+        "account_name": "hige",
+        "nick_name":    "ひげ",
+    ],
+    [
+        "updated":      "20151008",
+        "account_name": "huge",
+        "nick_name":    "ふげ",
+    ]
+]
+
+let comments: [[String: String]] = [
+    [
+        "comment": "おつ",
+        "created_at":      "20151008",
+    ],
+    [
+        "comment": "おつ",
+        "created_at":      "20151008",
+    ],
+    [
+        "comment": "おつ",
+        "created_at":      "20151008",
+    ],
+]
+
+func getUser(userId: Int) -> [String: AnyObject] {
+    return users[userId] 
 }
 
 func getProfile(userId: Int) -> [String: String] {
-    return [
-        "last_name":    "Tanaka",
-        "first_name":   "Taro",
-        "sex":          "male",
-        "birthday":     "20001000",
-        "pref":         "東京",
-        "friends_size": "40",
-    ]
+    return profiles[userId]
 }
 
 func currentUser() -> [String: AnyObject] {
@@ -42,78 +138,19 @@ func userFromAccount(accountName: String) -> [String: AnyObject]? {
 }
 
 func getEntries() -> [[String: AnyObject]] {
-    return [
-        [ 
-            "id": "0", 
-            "title": "はじめました",
-            "content": "これがうわさのアレか!",
-            "is_private": true,
-        ],
-        [ 
-            "id": "1", 
-            "title": "つづき",
-            "content": "いやっほおおおおおおおお\nおおおおおおおおおおおおおおおおおおおおおおおおおおおおおう",
-            "is_private": false,
-        ],
-        [ 
-            "id": "2", 
-            "title": "ひみつ",
-            "content": "まじもう仕事がこんなことになっていようとはと思ってたら予選なしにするんだった! まじで!",
-            "is_private": true,
-        ],
-        [ 
-            "id": "3", 
-            "title": "ビールのんだ",
-            "content": "うまああああああああああああああああああああああああああああああああああああああああああああああああああああい!",
-            "is_private": false,
-        ],
-    ]
+    return entries
 }
 
 func getEntry(entry_id: Int) -> [String: AnyObject] {
-    return [
-        "id": "3", 
-        "title": "ビールのんだ",
-        "content": "うまああああああああああああああああああああああああああああああああああああああああああああああああああああい!",
-        "is_private": false,
-    ]
+    return entries[entry_id]
 }
 
 func getFootprints() -> [[String: String]] {
-    return [
-        [
-            "updated":      "20151010",
-            "account_name": "hoge",
-            "nick_name":    "ほげ",
-        ],
-        [
-            "updated":      "20151009",
-            "account_name": "hige",
-            "nick_name":    "ひげ",
-        ],
-        [
-            "updated":      "20151008",
-            "account_name": "huge",
-            "nick_name":    "ふげ",
-        ]
-    ]
+    return footprints
 }
 
 func getComments() -> [[String: String]] {
-    return [
-        [
-            "comment": "おつ",
-            "created_at":      "20151008",
-        ],
-        [
-            "comment": "おつ",
-            "created_at":      "20151008",
-        ],
-        [
-            "comment": "おつ",
-            "created_at":      "20151008",
-        ],
-    ]
+    return comments
 }
 
 func prefectures() -> [String] {
