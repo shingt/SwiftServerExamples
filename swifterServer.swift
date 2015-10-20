@@ -5,7 +5,7 @@ func templatePath(path: String) -> String {
     return "./views/\(path).mustache"
 }
 
-// As I couldn't figure out an easy way to connect to db functions themselves contain data..
+// Since I haven't figured out an easy way to connect to db in Swift  dummy data is used instead of real data..
 
 let users: [[String: AnyObject]] = [
     [
