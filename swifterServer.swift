@@ -85,18 +85,18 @@ let entries: [[String: AnyObject]] = [
 let footprints: [[String: String]] = [
     [
         "updated":      "20151010",
-        "account_name": "hoge",
-        "nick_name":    "ほげ",
+        "account_name": "ichiro",
+        "nick_name":    "icchian",
     ],
     [
         "updated":      "20151009",
-        "account_name": "hige",
-        "nick_name":    "ひげ",
+        "account_name": "takeda",
+        "nick_name":    "take",
     ],
     [
         "updated":      "20151008",
-        "account_name": "huge",
-        "nick_name":    "ふげ",
+        "account_name": "ichiro",
+        "nick_name":    "icchian",
     ]
 ]
 
@@ -129,12 +129,15 @@ func currentUser() -> [String: AnyObject] {
 }
 
 func userFromAccount(accountName: String) -> [String: AnyObject]? {
-    return [
-        "id":           1,
-        "account_name": accountName,
-        "nick_name":    "soone",
-        "email":        "someone@email.com",
-    ]
+    for user: [String: AnyObject] in users {
+        guard let userName = user["account_name"] as? String else {
+            return nil
+        }
+        if userName == accountName {
+            return user
+        }
+    }
+    return nil
 }
 
 func getEntries() -> [[String: AnyObject]] {
@@ -256,7 +259,7 @@ server["/diary/entry/(.+)"] = { request in
             throw SwiftServerError.InvalidPath
         }
 
-        let account_name = "someone"  // FIX: getUser
+        let account_name = "shibuya.swift"  // FIX: getUser
         guard let owner = userFromAccount(account_name) else {
             throw SwiftServerError.ResourceNotFound
         }
