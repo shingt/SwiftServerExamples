@@ -131,7 +131,7 @@ func currentUser() -> [String: AnyObject] {
 func userFromAccount(accountName: String) -> [String: AnyObject]? {
     for user: [String: AnyObject] in users {
         guard let userName = user["account_name"] as? String else {
-            return nil
+            continue
         }
         if userName == accountName {
             return user
